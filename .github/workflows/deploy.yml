@@ -1,0 +1,53 @@
+name: Deploy Jupyter Book
+
+on:
+  push:
+    branches:
+      - main
+env:
+  # `BASE_URL` determines the website is served from, including CSS & JS assets
+  # You may need to change this to `BASE_URL: ''`
+  BASE_URL: /${{ github.event.repository.name }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pages: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build Jupyter Book
+        run: |
+          # Clear potential other myst configurations in external_notebooks
+          find external_notebooks -type f \( -iname "myst.yaml" -o -iname "myst.yml" \) -exec rm -v {} +
+          jupyter book build --html
+
+      - name: Generate Notebook List
+        run: |
+          python .github/workflows/generate_notebook_list.py
+          cp notebooks.json _build/html/notebooks.json
+          cp index.html _build/html/index.html
+          touch _build/html/.nojekyll
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _build/html/
+          branch: gh-pages
+          clean-exclude: pr-preview
+          force: false
