@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "title": "Title specified in notebook metadata",
+    "description": "Title specified in notebook metadata",
+    "metadata": {
+      "title": "Title specified in notebook metadata",
+      "description": "Title specified in notebook metadata",
+      "tags": [
+        "exampletag",
+        "otherexampletag"
+      ],
+      "image": "https://placehold.co/600x400.png"
+    },
+    "image": null,
+    "link": "notebooks/example-notebook",
+    "org": "submodule-org-fallback",
+    "repo": "example-viewer",
+    "source": "local",
+    "path": "notebooks/example_notebook.ipynb",
+    "gitpuller": "https://url.to.jhubinstance/hub/user-redirect/git-pull?repo=https://github.com/eoxhub-workspaces/example-viewer-template&urlpath=lab/tree/notebooks/example_notebook.ipynb&branch=main"
+  }
+]
