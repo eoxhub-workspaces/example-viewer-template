@@ -1,22 +1,42 @@
 [
   {
+    "title": "Example notebook 3",
+    "description": "Title specified in notebook metadata",
+    "image": null,
+    "link": "notebooks/example-notebook3",
+    "org": "submodule-org-fallback",
+    "repo": "example-viewer",
+    "source": "local",
+    "path": "notebooks/example_notebook3.ipynb",
+    "gitpuller": "https://url.to.jhubinstance/hub/user-redirect/git-pull?repo=https://github.com/eoxhub-workspaces/example-viewer-template&urlpath=lab/tree/notebooks/example_notebook3.ipynb&branch=main"
+  },
+  {
+    "title": "Example notebook 2",
+    "description": "Title specified in notebook metadata",
+    "image": null,
+    "link": "notebooks/example-notebook2",
+    "org": "submodule-org-fallback",
+    "repo": "example-viewer",
+    "source": "local",
+    "path": "notebooks/example_notebook2.ipynb",
+    "gitpuller": "https://url.to.jhubinstance/hub/user-redirect/git-pull?repo=https://github.com/eoxhub-workspaces/example-viewer-template&urlpath=lab/tree/notebooks/example_notebook2.ipynb&branch=main",
+    "tags": [
+      "otherexampletag"
+    ]
+  },
+  {
     "title": "Title specified in notebook metadata",
     "description": "Title specified in notebook metadata",
-    "metadata": {
-      "title": "Title specified in notebook metadata",
-      "description": "Title specified in notebook metadata",
-      "tags": [
-        "exampletag",
-        "otherexampletag"
-      ],
-      "image": "https://placehold.co/600x400.png"
-    },
     "image": null,
     "link": "notebooks/example-notebook",
     "org": "submodule-org-fallback",
     "repo": "example-viewer",
     "source": "local",
     "path": "notebooks/example_notebook.ipynb",
-    "gitpuller": "https://url.to.jhubinstance/hub/user-redirect/git-pull?repo=https://github.com/eoxhub-workspaces/example-viewer-template&urlpath=lab/tree/notebooks/example_notebook.ipynb&branch=main"
+    "gitpuller": "https://url.to.jhubinstance/hub/user-redirect/git-pull?repo=https://github.com/eoxhub-workspaces/example-viewer-template&urlpath=lab/tree/notebooks/example_notebook.ipynb&branch=main",
+    "tags": [
+      "exampletag",
+      "otherexampletag"
+    ]
   }
 ]
