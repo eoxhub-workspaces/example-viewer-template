@@ -298,10 +298,9 @@ def collect_notebooks():
                 # Always call extract_image_with_fallback to ensure processing
                 image = extract_image_with_fallback(nb, rel_path)
                 
-                catalog.append({
+                entry = {
                     "title": meta.get("title", extract_title_from_first_header(nb) or os.path.splitext(file)[0].replace("_", " ")),
                     "description": meta.get("description", ""),
-                    "metadata": meta,
                     "image": image,
                     "link": myst_url_sanitation(rel_path.replace(".ipynb", "")),
                     "org": DEF_ORG,
@@ -309,7 +308,14 @@ def collect_notebooks():
                     "source": "local",
                     "path": rel_path,
                     "gitpuller": f"https://{JHUB_INSTANCE}/hub/user-redirect/git-pull?repo={git_url}&urlpath=lab/tree/{rel_path}&branch=main",
-                })
+                }
+                # inject metadata fields if not already present
+                for key in meta:
+                    # only add if not already present
+                    if key not in entry:
+                        entry[key] = meta[key]
+                
+                catalog.append(entry)
 
     # --- Submodule notebooks
     submodules_root = os.path.join(ROOT_DIR, SUBMODULE_ROOT)
@@ -340,11 +346,9 @@ def collect_notebooks():
                                 nb = nbformat.read(abs_path, as_version=4)
                             # Always call extract_image_with_fallback to ensure processing
                             image = extract_image_with_fallback(nb, rel_path)
-                            
-                            catalog.append({
+                            entry = {
                                 "title": meta.get("title", extract_title_from_first_header(nb) or os.path.splitext(file)[0].replace("_", " ")),
                                 "description": meta.get("description", ""),
-                                "metadata": meta,
                                 "image": image,
                                 "link": myst_url_sanitation(rel_path.replace(".ipynb", "")),
                                 "org": git_info.get("org"),
@@ -352,7 +356,14 @@ def collect_notebooks():
                                 "source": "submodule",
                                 "path": rel_path,
                                 "gitpuller": f"https://{JHUB_INSTANCE}/hub/user-redirect/git-pull?repo={git_url}&urlpath=lab/tree/{repo_path}&branch=main",
-                            })
+                            }
+                            # inject metadata fields if not already present
+                            for key in meta:
+                                # only add if not already present
+                                if key not in entry:
+                                    entry[key] = meta[key]
+
+                            catalog.append(entry)
 
     return catalog
 

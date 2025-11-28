@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Example Explorer</title>
   <script type="module">
-    import "https://cdn.jsdelivr.net/npm/@eox/layout@0.5.1/dist/eox-layout.js";
-    import "https://cdn.jsdelivr.net/npm/@eox/itemfilter@1.9.1/dist/eox-itemfilter.js";
+    import "https://cdn.jsdelivr.net/npm/@eox/layout@1.0.0/dist/eox-layout.js";
+    import "https://cdn.jsdelivr.net/npm/@eox/itemfilter@1.13.0/dist/eox-itemfilter.js";
   </script>
   <link
     rel="stylesheet"
@@ -37,16 +37,23 @@
         titleProperty: "title",
         imageProperty: "image",
         resultType: "cards",
+        aggregateResults: "tags",
         filterProperties: [
           {
             "keys": [
-              "title",
+              "title"
             ],
             "title": "Search",
             "type": "text",
             "placeholder": "Type Something...",
             "expanded": true,
           },
+          {
+            "key": "tags",
+            "title": "Tags",
+            "type": "multiselect",
+            "expanded": true,
+          }
         ],
         enableResultAction: true,
         subTitleProperty: "description",
