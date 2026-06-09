@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 env:
   # `BASE_URL` determines the website is served from, including CSS & JS assets
   # You may need to change this to `BASE_URL: ''`
@@ -18,12 +19,12 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: 'true'
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.10"
 
@@ -37,6 +38,33 @@ jobs:
           find external_notebooks -type f \( -iname "myst.yaml" -o -iname "myst.yml" \) -exec rm -v {} +
           jupyter book build --html
 
+          # FIX: Overwrite hardcoded Webpack publicPath in MyST/Thebe bundles to respect BASE_URL
+          if [ -n "$BASE_URL" ]; then
+            echo "Applying BASE_URL fix for: $BASE_URL"
+            THEBE_FILES=$(find _build/html -type f -name "thebe-*.min.js")
+            FILE_COUNT=$(echo "$THEBE_FILES" | grep -c . || echo 0)
+            echo "Found $FILE_COUNT thebe-*.min.js files."
+            
+            for f in $THEBE_FILES; do
+              echo "Processing $f..."
+              # Check if the string exists before sed
+              if grep -q "__webpack_require__\.p=\"/\"" "$f"; then
+                echo "  Match found, applying replacement."
+                sed -i "s|__webpack_require__\.p=\"/\"|__webpack_require__.p=\"${BASE_URL}/\"|g" "$f"
+                # Verify change
+                if grep -q "__webpack_require__\.p=\"${BASE_URL}/\"" "$f"; then
+                  echo "  Verified: Replacement successful."
+                else
+                  echo "  Error: Replacement failed verification."
+                fi
+              else
+                echo "  No match found in this file (may have already been replaced or string differs)."
+              fi
+            done
+          else
+            echo "BASE_URL is not set, skipping webpack path fix."
+          fi
+
       - name: Generate Notebook List
         run: |
           python .github/workflows/generate_notebook_list.py
@@ -45,7 +73,7 @@ jobs:
           touch _build/html/.nojekyll
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f # v4
         with:
           folder: _build/html/
           branch: gh-pages
